@@ -1,0 +1,85 @@
+<!-- cart/cart_detail.html 
+{% extends 'product/product_base.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+
+    
+<h1 class="text-center py-5 text-success">Your Cart</h1>
+
+{% if cart_items %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Product</th>
+      <th scope="col">Image</th>
+      <th scope="col">Price</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Increase/Decrease</th>
+      <th scope="col">Remove Item</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in cart_items %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{ item.product.name }}</td>
+      <td>
+        <img src="{{ item.product.image.url }}" width="50px" height="50px" alt="prod_img">
+      </td>
+      <td>${{ item.product.price }}</td>
+      <td class="text-center">{{ item.quantity }}</td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-btn">
+            <a href="{% url 'item_decrement' item.product.id %}" class="btn btn-danger btn-number">
+              <i class="bi bi-dash"></i>
+            </a>
+          </span>
+          <div class="text-center">
+          <input type="text" name="quantity" class="form-control input-number text-center" value="{{ item.quantity }}" min="1"
+            max="10">
+          </div>
+          <span class="input-group-btn">
+            <a href="{% url 'item_increment' item.product.id %}" class="btn btn-success btn-number">
+              <i class="bi bi-plus"></i>
+            </a>
+          </span>
+        </div>
+      </td>
+      <td>
+        <a href="{% url 'cart_remove' item.product.id %}" class="btn btn-danger btn-sm">Remove</a>
+      </td>
+
+    </tr>
+    {% endfor %}
+  </tbody>
+</table><br>
+</div>
+</div>
+</div>
+
+
+
+<div class="container py-5">
+  <div class="row justify-content-end">
+    <div class="col-md-4">
+<p>Total Price: ${{ total_price }}</p>
+
+<form action="{% url 'cart_clear' %}" method="post">
+  {% csrf_token %}
+  <input type="submit" value="Clear Cart" class="btn btn-danger">
+</form>
+{% else %}
+<p>Your cart is empty.</p>
+{% endif %}
+
+</div>
+</div>
+</div>
+{% endblock %}
+
+---------------------------------------------->

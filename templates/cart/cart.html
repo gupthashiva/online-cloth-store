@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+{% load cart %}
+{% load custom_filter %}
+
+
+<main>
+ <!-- page-banner-area-start -->
+ <div class="page-banner-area page-banner-height-2" data-background="{% static 'assets/img/banner/page-banner-4.jpg' %}">
+  <div class="container">
+   <div class="row">
+    <div class="col-xl-12">
+     <div class="page-banner-content text-center">
+      <h4 class="breadcrumb-title">Your Cart</h4>
+      <div class="breadcrumb-two">
+       <nav>
+        <nav class="breadcrumb-trail breadcrumbs">
+         <ul class="breadcrumb-menu">
+          <li class="breadcrumb-trail">
+           <a href="{% url 'home' %}"><span>Home</span></a>
+          </li>
+          <li class="trail-item">
+           <span>Cart</span>
+          </li>
+         </ul>
+        </nav>
+       </nav>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+ </div>
+ <!-- page-banner-area-end -->
+
+ <!-- cart-area-start -->
+ <section class="cart-area pt-120 pb-120">
+  <div class="container">
+   <div class="row">
+    <div class="col-12">
+     <form action="#">
+      <div class="table-content table-responsive">
+       <table class="table">
+        <thead>
+         <tr>
+          <th class="product-thumbnail">Images</th>
+          <th class="cart-product-name">Product</th>
+          <th class="product-price">Price</th>
+          <th class="product-quantity">Items</th>
+          <th class="product-subtotal">Cart Quantity</th>
+          <th class="product-subtotal">For Day Total</th>
+          <th class="product-remove">Remove</th>
+         </tr>
+        </thead>
+        <tbody>
+ 
+
+        {% for product in products %}
+          
+        {% if product|is_in_cart:request.session.cart %}
+         
+
+         <tr>
+          <td class="product-thumbnail"><a href="shop-details.html"><img src="{{product.featured_Image}}" alt=""></a>
+          </td>
+          <td class="product-name"><a href="shop-details.html">{{product.product_name}}</a></td>
+          <td class="product-price"><span class="amount">₹ {{product.price}}</span></td>
+          
+          <td class="product-subtotal"><span class="amount">{{product|cart_quantity:request.session.cart}}</span></td>
+         <div class="#">
+          <form action="/#{{product.id}}" class="col-1 " method="post">
+            {% csrf_token %}
+          </form>
+          <td class="product-quantity">
+          <div class="row no-gutters ">
+            <form action="/#{{product.id}}" class="col-3   " method="post">
+              {% csrf_token %}
+              <input hidden type="text" name='product' value='{{product.id}}'>
+              <input hidden type="text" name='remove' value='True'>
+              <input type="submit" value=" - " class="btn btn-block btn-light">
+            </form>
+            <div class="text-center col  ">{{product|cart_quantity:request.session.cart}} in Cart</div>
+            <form action="/#{{product.id}}" class="col-3" method="post">
+              {% csrf_token %}
+              <input hidden type="text" name='product' value='{{product.id}}'>
+              <input type="submit" value=" + " class="btn btn-block btn-light  ">
+            </form>
+          </div>
+            </div>
+          
+          </td>
+
+          <td class="product-subtotal"><span class="amount">{{product|price_total:request.session.cart|currency}}</span></td>
+          <td class="product-remove"><a href="{% url 'item_clear' product.id %}">Remove</a></td>
+            
+         </tr>
+      
+
+         </td>
+         </tr>
+        <!-- Display discounted total price -->
+        <p><span class="text-danger">Note:</span> Deposite Security price: <span class="text-danger">${{ discounted_total_price|floatformat:"2" }}</span></p>
+
+         {% endif %}
+       {% endfor %}
+        
+        </tbody>
+       </table>
+      </div>
+
+      
+
+        
+        </div>
+       </div>
+      </div>
+
+</div>
+</div>
+</div>
+
+      <div class="row justify-content-end">
+       <div class="col-md-5">
+        <div class="cart-page-total">
+         <h2>Cart totals</h2>
+         <ul class="mb-20">
+          
+          <li>Total <span> {{products|total_cart_price:request.session.cart|currency}} </span></li>
+         </ul>
+         
+         <a class="tp-btn-h1" href="{% url 'check_out' %}">Proceed to pay</a>
+       
+
+        </div>
+       </div>
+      </div>
+     </form>
+    </div>
+   </div>
+  </div>
+ </section>
+
+
+ <!-- cta-area-start -->
+ <section class="cta-area d-ldark-bg pt-55 pb-10">
+  <div class="container">
+   <div class="row">
+    <div class="col-lg-4 col-md-6">
+     <div class="cta-item cta-item-d mb-30">
+      <h5 class="cta-title">Follow Us</h5>
+      <p>We make consolidating, marketing and tracking your social media website easy.</p>
+      <div class="cta-social">
+       <div class="social-icon">
+        <a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="youtube"><i class="fab fa-youtube"></i></a>
+        <a href="#" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" class="rss"><i class="fas fa-rss"></i></a>
+        <a href="#" class="dribbble"><i class="fab fa-dribbble"></i></a>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-4 col-md-6">
+     <div class="cta-item mb-30">
+      <h5 class="cta-title">Sign Up To Newsletter</h5>
+      <p>Join 60.000+ subscribers and get a new discount coupon on every Saturday.</p>
+      <div class="subscribe__form">
+       <form action="#">
+        <input type="email" placeholder="Enter your email here...">
+        <button>subscribe</button>
+       </form>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-4 col-md-6">
+     <div class="cta-item mb-30">
+      <h5 class="cta-title">Download App</h5>
+      <p>DukaMarket App is now available on App Store & Google Play. Get it now.</p>
+      <div class="cta-apps">
+       <div class="apps-store">
+        <a href="#"><img src="{%  static 'assets/img/brand/app_ios.png' %}" alt=""></a>
+        <a href="#"><img src="{% static 'assets/img/brand/app_android.png' %}" alt=""></a>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+
+ </section>
+ <!-- cta-area-end -->
+{% block script %}
+<button id="rzp-button1">Pay</button>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+{% endblock %}
+
+</main>
+{% endblock %}
